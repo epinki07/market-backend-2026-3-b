@@ -34,7 +34,7 @@ public class CompraRepository implements PurchaseRepository {
     public Purchase save(Purchase purchase) {
         Compra compra = purchaseMapper.toCompra(purchase);
 
-        // Apoyo de IA: se deja visible el paso critico solicitado por la rubrica.
+        // Relaciona cada detalle con la compra principal antes de guardar.
         if (compra.getProductos() != null) {
             compra.getProductos().forEach(producto -> producto.setCompra(compra));
         }
