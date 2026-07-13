@@ -26,7 +26,7 @@ public class Producto {
     private Integer cantidadStock;
 
     @Column(name = "estado")
-    private String estado;
+    private boolean estado;
 
     @ManyToOne
     @JoinColumn(name = "id_categoria",
@@ -75,11 +75,11 @@ public class Producto {
         this.cantidadStock = cantidadStock;
     }
 
-    public String getEstado() {
+    public boolean isEstado() {
         return estado;
     }
 
-    public void setEstado(String estado) {
+    public void setEstado(boolean estado) {
         this.estado = estado;
     }
 
