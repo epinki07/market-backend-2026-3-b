@@ -1,22 +1,11 @@
-package mx.edu.tecdesoftware.market_backend.domain.service;
+package mx.edu.tecdesoftware.market_backend.persistence.web.controller;
 
-public class Product {
-    private Integer productId;
+public class ProductRequest {
     private String name;
     private int categoryId;
     private double price;
     private int stock;
     private boolean active;
-    private Category category;
-
-
-    public Integer getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Integer productId) {
-        this.productId = productId;
-    }
 
     public String getName() {
         return name;
@@ -56,13 +45,5 @@ public class Product {
 
     public void setActive(boolean active) {
         this.active = active;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
     }
 }

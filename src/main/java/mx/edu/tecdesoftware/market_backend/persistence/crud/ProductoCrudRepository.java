@@ -18,6 +18,9 @@ public interface ProductoCrudRepository extends CrudRepository<Producto, Integer
     // y ordenarlos ascendentemente por nombre
 
     List<Producto> findByIdCategoriaOrderByNombreAsc(int idCategoria);
+    List<Producto> findByEstadoTrue();
+    List<Producto> findByIdCategoriaAndEstadoTrueOrderByNombreAsc(int idCategoria);
+    Optional<Producto> findByIdProductoAndEstadoTrue(int idProducto);
 
     // Obtener los productos escasos
     Optional<List<Producto>> findByCantidadStockLessThanAndEstado(int cantidad,boolean estado);

@@ -20,7 +20,7 @@ public class Producto {
     private String codigoBarras;
 
     @Column(name = "precio_venta")
-    private Integer precioVenta;
+    private Double precioVenta;
 
     @Column(name = "cantidad_stock")
     private Integer cantidadStock;
@@ -59,11 +59,11 @@ public class Producto {
         this.codigoBarras = codigoBarras;
     }
 
-    public Integer getPrecioVenta() {
+    public Double getPrecioVenta() {
         return precioVenta;
     }
 
-    public void setPrecioVenta(Integer precioVenta) {
+    public void setPrecioVenta(Double precioVenta) {
         this.precioVenta = precioVenta;
     }
 

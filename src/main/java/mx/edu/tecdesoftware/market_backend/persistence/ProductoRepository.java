@@ -1,8 +1,11 @@
 package mx.edu.tecdesoftware.market_backend.persistence;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import mx.edu.tecdesoftware.market_backend.domain.repository.ProductRepository;
 import mx.edu.tecdesoftware.market_backend.domain.service.Product;
 import mx.edu.tecdesoftware.market_backend.persistence.crud.ProductoCrudRepository;
+import mx.edu.tecdesoftware.market_backend.persistence.entity.Categoria;
 import mx.edu.tecdesoftware.market_backend.persistence.entity.Producto;
 import mx.edu.tecdesoftware.market_backend.persistence.mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,18 +21,20 @@ public class ProductoRepository implements ProductRepository {
     private ProductoCrudRepository productoCrudRepository;
     @Autowired
     private ProductMapper productMapper;
+    @PersistenceContext
+    private EntityManager entityManager;
 
 
     // SELECT * FROM productos
     @Override
     public List<Product> getAll() {
-        List<Producto> productos = (List<Producto>) productoCrudRepository.findAll();
+        List<Producto> productos = productoCrudRepository.findByEstadoTrue();
         return productMapper.toProducts(productos);
     }
 
     @Override
     public Optional<List<Product>> getByCategory(int categoryId) {
-        List<Producto> productos = productoCrudRepository.findByIdCategoriaOrderByNombreAsc(categoryId);
+        List<Producto> productos = productoCrudRepository.findByIdCategoriaAndEstadoTrueOrderByNombreAsc(categoryId);
         return Optional.of(productMapper.toProducts(productos));
     }
 
@@ -48,7 +53,7 @@ public class ProductoRepository implements ProductRepository {
     //Obtener un producto dado el id
     @Override
     public Optional<Product> getProduct(int productId) {
-        return productoCrudRepository.findById(productId)
+        return productoCrudRepository.findByIdProductoAndEstadoTrue(productId)
                 .map(producto ->  productMapper.toProduct(producto));
     }
 
@@ -56,15 +61,19 @@ public class ProductoRepository implements ProductRepository {
     @Override
     public Product save(Product product) {
         Producto producto = productMapper.toProducto(product);
-        return productMapper.toProduct(productoCrudRepository.save(producto));
+        Producto savedProduct = productoCrudRepository.save(producto);
+        if (savedProduct.getIdCategoria() != null) {
+            savedProduct.setCategoria(entityManager.find(Categoria.class, savedProduct.getIdCategoria()));
+        }
+        return productMapper.toProduct(savedProduct);
     }
 
     //Elimina un producto
     @Override
     public void delete(int productId){
-        productoCrudRepository.deleteById(productId);
+        productoCrudRepository.findById(productId).ifPresent(producto -> {
+            producto.setEstado(false);
+            productoCrudRepository.save(producto);
+        });
     }
 }
-
-
-

@@ -1,24 +1,15 @@
-package mx.edu.tecdesoftware.market_backend.domain.service;
+package mx.edu.tecdesoftware.market_backend.persistence.web.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class Purchase {
-    private Integer purchaseId;
+public class PurchaseRequest {
     private String clientId;
     private LocalDateTime date;
     private String paymentMethod;
     private String comment;
     private String state;
-    private List<PurchaseItem> items;
-
-    public Integer getPurchaseId() {
-        return purchaseId;
-    }
-
-    public void setPurchaseId(Integer purchaseId) {
-        this.purchaseId = purchaseId;
-    }
+    private List<PurchaseItemRequest> items;
 
     public String getClientId() {
         return clientId;
@@ -60,11 +51,11 @@ public class Purchase {
         this.state = state;
     }
 
-    public List<PurchaseItem> getItems() {
+    public List<PurchaseItemRequest> getItems() {
         return items;
     }
 
-    public void setItems(List<PurchaseItem> items) {
+    public void setItems(List<PurchaseItemRequest> items) {
         this.items = items;
     }
 }
