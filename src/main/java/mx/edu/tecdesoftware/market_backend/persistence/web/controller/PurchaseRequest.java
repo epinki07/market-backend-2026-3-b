@@ -5,9 +5,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Schema(description = "Purchase creation request")
+@Schema(description = "Purchase data")
 public class PurchaseRequest {
-    @Schema(description = "Existing client ID", example = "CLI001")
+    @Schema(description = "Client ID", example = "CLI001")
     private String clientId;
 
     @Schema(description = "Purchase date and time", example = "2026-07-16T10:30:00")
@@ -16,13 +16,13 @@ public class PurchaseRequest {
     @Schema(description = "Payment method code", example = "E")
     private String paymentMethod;
 
-    @Schema(description = "Optional purchase comment", example = "Purchase created from Swagger")
+    @Schema(description = "Short note", example = "Swagger test purchase")
     private String comment;
 
     @Schema(description = "Purchase state code", example = "A")
     private String state;
 
-    @Schema(description = "Products included in the purchase")
+    @Schema(description = "Products in this purchase")
     private List<PurchaseItemRequest> items;
 
     public String getClientId() {

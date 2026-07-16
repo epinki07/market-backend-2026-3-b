@@ -25,19 +25,19 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/products")
-@Tag(name = "Products", description = "Manage products in the store")
+@Tag(name = "Products", description = "Products endpoints")
 public class ProductController {
     @Autowired
     private ProductService productService;
 
     @Operation(
             summary = "Get all products",
-            description = "Returns every active product available in the store catalog."
+            description = "Get the active products."
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Successful retrieval of products"),
+            @ApiResponse(responseCode = "200", description = "Products found"),
             @ApiResponse(responseCode = "404", description = "No products found"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "500", description = "Server error")
     })
     @GetMapping("/all")
     public ResponseEntity<List<Product>> getAll() {
@@ -50,17 +50,17 @@ public class ProductController {
 
     @Operation(
             summary = "Get product by ID",
-            description = "Returns one active product that matches the provided product ID."
+            description = "Get one product with its ID."
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Product found"),
-            @ApiResponse(responseCode = "400", description = "Invalid product id"),
+            @ApiResponse(responseCode = "400", description = "Wrong product ID"),
             @ApiResponse(responseCode = "404", description = "Product not found"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "500", description = "Server error")
     })
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProduct(
-            @Parameter(description = "Product ID to search for", example = "1")
+            @Parameter(description = "Product ID", example = "1")
             @PathVariable("id") int productId) {
         return productService.getProductById(productId)
                 .map(product -> new ResponseEntity<>(product, HttpStatus.OK))
@@ -69,17 +69,17 @@ public class ProductController {
 
     @Operation(
             summary = "Get products by category",
-            description = "Returns active products that belong to the provided category ID."
+            description = "Get products from a category."
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Products found"),
-            @ApiResponse(responseCode = "400", description = "Invalid category id"),
+            @ApiResponse(responseCode = "400", description = "Wrong category ID"),
             @ApiResponse(responseCode = "404", description = "Category has no products"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "500", description = "Server error")
     })
     @GetMapping("/category/{categoryId}")
     public ResponseEntity<List<Product>> getByCategory(
-            @Parameter(description = "Category ID used to filter products", example = "1")
+            @Parameter(description = "Category ID", example = "1")
             @PathVariable("categoryId") int categoryId) {
         return productService.getByCategory(categoryId)
                 .filter(products -> !products.isEmpty())
@@ -89,25 +89,25 @@ public class ProductController {
 
     @Operation(
             summary = "Create product",
-            description = "Creates a product with a name, category, price, stock quantity, and active status."
+            description = "Add a product."
     )
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Product saved"),
-            @ApiResponse(responseCode = "400", description = "Invalid product data"),
-            @ApiResponse(responseCode = "409", description = "Product already exists"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "400", description = "Wrong product data"),
+            @ApiResponse(responseCode = "409", description = "Product exists already"),
+            @ApiResponse(responseCode = "500", description = "Server error")
     })
     @PostMapping("/save")
     public ResponseEntity<Product> save(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "Product data to create. Use an existing categoryId from the catalog.",
+                    description = "Product data. The categoryId must exist.",
                     required = true,
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ProductRequest.class),
                             examples = @ExampleObject(
                                     name = "Valid product request",
-                                    summary = "Product in seeded category 1",
+                                    summary = "New product example",
                                     value = """
                                             {
                                               "name": "Pera verde",
@@ -127,17 +127,17 @@ public class ProductController {
 
     @Operation(
             summary = "Delete product by ID",
-            description = "Disables an active product matching the provided product ID. The product is not physically removed from the database."
+            description = "Set a product as inactive."
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Product deleted"),
-            @ApiResponse(responseCode = "400", description = "Invalid product id"),
+            @ApiResponse(responseCode = "400", description = "Wrong product ID"),
             @ApiResponse(responseCode = "404", description = "Product not found"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "500", description = "Server error")
     })
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(
-            @Parameter(description = "Product ID to disable", example = "1")
+            @Parameter(description = "Product ID", example = "1")
             @PathVariable("id") int productId) {
         if (productService.delete(productId)) {
             return new ResponseEntity<>(HttpStatus.OK);

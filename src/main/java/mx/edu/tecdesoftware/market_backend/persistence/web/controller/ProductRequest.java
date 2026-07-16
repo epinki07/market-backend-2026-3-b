@@ -2,21 +2,21 @@ package mx.edu.tecdesoftware.market_backend.persistence.web.controller;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-@Schema(description = "Product creation request")
+@Schema(description = "Product data")
 public class ProductRequest {
     @Schema(description = "Product name", example = "Pera verde")
     private String name;
 
-    @Schema(description = "Existing category ID", example = "1")
+    @Schema(description = "Category ID", example = "1")
     private int categoryId;
 
-    @Schema(description = "Product sale price", example = "22.5")
+    @Schema(description = "Sale price", example = "22.5")
     private double price;
 
-    @Schema(description = "Available stock quantity", example = "40")
+    @Schema(description = "Stock amount", example = "40")
     private int stock;
 
-    @Schema(description = "Whether the product is active", example = "true")
+    @Schema(description = "Active product", example = "true")
     private boolean active;
 
     public String getName() {

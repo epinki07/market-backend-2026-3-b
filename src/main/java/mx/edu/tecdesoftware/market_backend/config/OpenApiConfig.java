@@ -13,6 +13,6 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("Market Backend API")
                         .version("1.0.0")
-                        .description("API REST para productos y compras de mercado."));
+                        .description("REST API for market products and purchases."));
     }
 }

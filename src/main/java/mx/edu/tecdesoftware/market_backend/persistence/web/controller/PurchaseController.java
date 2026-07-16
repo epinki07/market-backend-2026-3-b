@@ -26,19 +26,19 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/purchases")
-@Tag(name = "Purchases", description = "Manage purchases in the store")
+@Tag(name = "Purchases", description = "Purchases endpoints")
 public class PurchaseController {
     @Autowired
     private PurchaseService purchaseService;
 
     @Operation(
             summary = "Get all purchases",
-            description = "Returns every purchase registered in the store."
+            description = "Get all purchases."
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Successful retrieval of purchases"),
+            @ApiResponse(responseCode = "200", description = "Purchases found"),
             @ApiResponse(responseCode = "404", description = "No purchases found"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "500", description = "Server error")
     })
     @GetMapping("/all")
     public ResponseEntity<List<Purchase>> getAll() {
@@ -51,16 +51,16 @@ public class PurchaseController {
 
     @Operation(
             summary = "Get purchases by client ID",
-            description = "Returns purchases made by the client matching the provided client ID."
+            description = "Get purchases from one client."
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Purchases found"),
             @ApiResponse(responseCode = "404", description = "Client has no purchases"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "500", description = "Server error")
     })
     @GetMapping("/client/{id}")
     public ResponseEntity<List<Purchase>> getByClient(
-            @Parameter(description = "Client ID used to filter purchases", example = "CLI001")
+            @Parameter(description = "Client ID", example = "CLI001")
             @PathVariable("id") String clientId) {
         return purchaseService.getByClient(clientId)
                 .filter(purchases -> !purchases.isEmpty())
@@ -70,30 +70,30 @@ public class PurchaseController {
 
     @Operation(
             summary = "Create purchase",
-            description = "Creates a purchase for an existing client with one or more active products."
+            description = "Add a purchase for one client."
     )
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Purchase saved"),
-            @ApiResponse(responseCode = "400", description = "Invalid purchase data"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "400", description = "Wrong purchase data"),
+            @ApiResponse(responseCode = "500", description = "Server error")
     })
     @PostMapping("/save")
     public ResponseEntity<Purchase> save(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "Purchase data to create. Use an existing clientId and active product IDs.",
+                    description = "Purchase data. The clientId and product IDs must exist.",
                     required = true,
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = PurchaseRequest.class),
                             examples = @ExampleObject(
                                     name = "Valid purchase request",
-                                    summary = "Purchase for seeded client CLI001",
+                                    summary = "New purchase example",
                                     value = """
                                             {
                                               "clientId": "CLI001",
                                               "date": "2026-07-16T10:30:00",
                                               "paymentMethod": "E",
-                                              "comment": "Purchase created from Swagger",
+                                              "comment": "Swagger test purchase",
                                               "state": "A",
                                               "items": [
                                                 {
