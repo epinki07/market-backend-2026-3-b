@@ -1,14 +1,28 @@
 package mx.edu.tecdesoftware.market_backend.persistence.web.controller;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Schema(description = "Purchase creation request")
 public class PurchaseRequest {
+    @Schema(description = "Existing client ID", example = "CLI001")
     private String clientId;
+
+    @Schema(description = "Purchase date and time", example = "2026-07-16T10:30:00")
     private LocalDateTime date;
+
+    @Schema(description = "Payment method code", example = "E")
     private String paymentMethod;
+
+    @Schema(description = "Optional purchase comment", example = "Purchase created from Swagger")
     private String comment;
+
+    @Schema(description = "Purchase state code", example = "A")
     private String state;
+
+    @Schema(description = "Products included in the purchase")
     private List<PurchaseItemRequest> items;
 
     public String getClientId() {
